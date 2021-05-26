@@ -251,7 +251,7 @@ return {turnOrder, testSwitch}
 }
     
     
-// Marker for 'O'
+// Marker for 'O'!
 const PlayerO = () => {
     let space = document.querySelectorAll('td');
     let markerLimit = true;
