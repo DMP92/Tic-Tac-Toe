@@ -285,7 +285,11 @@ computer.testSwitch();
         
     
 
- 
+        
+function test() {
+    console.log("git test");
+}
+        
         
         
         
