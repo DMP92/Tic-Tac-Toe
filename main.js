@@ -286,12 +286,19 @@ computer.testSwitch();
     
 
         
-function test() {
-    console.log("git test");
-}
-        
-        
-        
+// So basically - when pushing changes to repo through terminal
+// the order is: 
+// 1.   'git status'
+// to check to see that they're there with
+
+// 2.   'git add .'
+// to add the changes 
+
+// 3.   'git commit -m "comment here"'
+// to label your changes for organization
+
+// 4.   'git push'
+// to push the changes to your repo
         
         
         
