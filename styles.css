@@ -126,6 +126,7 @@ h1 {
 
 @media screen and (max-width: 500px) {
     .TTT {
+        display: block;
         outline: 0px transparent;
         border: 0px transparent;
         margin-top: 0px;
@@ -134,23 +135,22 @@ h1 {
         height: 350px;
         justify-self: center;
         color: white;
-        font-size: 56px;
+        font-size: 150px;
         font-family: Avenir Next;
         position: relative;
     }
 }
 @media screen and (min-width: 501px) {
     .TTT {
+        display: block;
         
-        outline: 0px transparent;
-        border: 0px transparent;
         margin-top: 20px;
         grid-area: 'game';
         width: 450px;
         height: 450px;
         justify-self: center;
         color: white;
-        font-size: 56px;
+        font-size: 150px;
         font-family: Avenir Next;
         position: relative;
 
@@ -161,7 +161,7 @@ h1 {
 
 tr {
     background-color: rgb(0, 80, 100);
-
+    padding: 0;
     height: 147px;
     width: 147px;
     outline: transparent;
@@ -170,7 +170,7 @@ tr {
 
 td {
     background-color: rgb(0, 80, 100);
-
+    padding: 0;
     height: 147px;
     width: 147px;
     outline: transparent;
