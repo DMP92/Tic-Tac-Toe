@@ -14,10 +14,13 @@
     
 */
 
+
+// global copies of both needed arrays
 let gameBoard = [];
+let gameText = [];
+
 
 // separates the NodeList of 'spaces' into 9 individual array places in the 'gameBoard' array
-
 function singleSpace() {
     let spaces = document.querySelectorAll('td');
     
@@ -26,8 +29,6 @@ function singleSpace() {
     }
 }
 singleSpace();
-
-
 
 // takes the clicked table data element and assigns it the proper index, which can then be used later
 function scoring() {
@@ -46,113 +47,91 @@ function scoring() {
 
 }      
 
-// logic behind wins and lose and draw
 
+// logic behind wins and lose and draw
 function scoreTrack(index) {
     spaces = document.querySelectorAll('td');
     console.log(index);
-    let trackWin = true;
-
-    if (trackWin === true) {
+    
 
     switch(true) {
         // middle row
         case gameBoard[3].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[5].textContent === 'X':
-            console.log("X's Won!");
+            GBModule.winner('X');
             Scoring.gameX(index);
-            firstPlayer.testSwitch();
+            GBModule.end(true);
         break;
         case gameBoard[3].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[5].textContent == 'O':
-            console.log("O's Won!");
+            GBModule.winner('O');
             Scoring.gameO(index);
-            firstPlayer.testSwitch();
+            GBModule.end(true);
 
         break;
         // top row
         case gameBoard[0].textContent === 'X' && gameBoard[1].textContent === 'X' && gameBoard[2].textContent == 'X':
-            console.log("X's Won!");
-                firstPlayer.testSwitch();
-
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[1].textContent === 'O' && gameBoard[2].textContent == 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;
         // bottom row
         case gameBoard[6].textContent === 'X' && gameBoard[7].textContent === 'X' && gameBoard[8].textContent == 'X':
-            console.log("X's Won!");
-            firstPlayer.testSwitch();
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[7].textContent === 'O' && gameBoard[8].textContent == 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;
         // left column
         case gameBoard[0].textContent === 'X' && gameBoard[3].textContent === 'X' && gameBoard[6].textContent == 'X':
-            console.log("X's Won!");
-            firstPlayer.testSwitch();
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[3].textContent === 'O' && gameBoard[6].textContent == 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;
         // middle column
         case gameBoard[1].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[7].textContent == 'X':
-            console.log("X's Won!");
-            firstPlayer.testSwitch();
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         case gameBoard[1].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[7].textContent == 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;
         // right column
         case gameBoard[2].textContent === 'X' && gameBoard[5].textContent === 'X' && gameBoard[8].textContent == 'X':
-            console.log("X's Won!");
-            firstPlayer.testSwitch();
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         
         case gameBoard[2].textContent === 'O' && gameBoard[5].textContent === 'O' && gameBoard[8].textContent == 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;
         // top left to bottom right diagonal
         case gameBoard[0].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[8].textContent == 'X':
-            console.log("X's Won!");
-            firstPlayer.testSwitch();
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         case gameBoard[0].textContent == 'O' && gameBoard[4].textContent == 'O' && gameBoard[8].textContent == 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;
         // top right to bottom left diagonal
         case gameBoard[6].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[2].textContent === 'X':
-            console.log("X's Won!");
-            firstPlayer.testSwitch();
-            trackWin = false;
+            GBModule.winner('X');
+            GBModule.end(true);
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[2].textContent === 'O':
-            console.log("O's Won!");
-            computer.testSwitch();
-            trackWin = false;
+            GBModule.winner('O');
+            GBModule.end(true);
         break;      
-    }
-
-} else if (trackWin === false) {
-    console.log("game over");
-}
-    
+    } 
 }     
 
 
@@ -195,133 +174,146 @@ function catGame(e) {
 
 
 
-// Module for TTT board rules
+// Module for TTT board & functionality
 var GBModule = (function() {
         // private variables   
         let gameBoard = [];
         let turn = true;
+        let spaces = document.querySelectorAll('td');
+        
+        // function for forcing turn order
+        function turnOrder(e) {     
+            switch (true) {
+                case turn == true:
+                    gameText.push('X');
+                    spaceSelectX(e); 
+                    spaces.forEach(space => space.addEventListener('click', scoring));           
+                    turn = false;
+                break;
                 
+                case turn == false:
+                    gameText.push('O');
+                    spaceSelectO(e);
+                    spaces.forEach(space => space.addEventListener('click', scoring));           
+                    turn = true;
+                break;
+                }
+        }
+        
+        // function that stops all event listeners after someone wins
+        function gameEnd(a) {
+            let game = a;
+
+            switch(true) {
+                case game === true:
+                    spaces.forEach(space => space.removeEventListener('click', turnOrder));    
+                    spaces.forEach(space => space.removeEventListener('click', scoring));    
+                break;
+                
+                default:
+                    spaces.forEach(space => space.addEventListener('click', turnOrder));           
+            }
+        }
+        
+        function winner(a) {
+            
+            if (a === 'X') {
+                firstPlayer.winner();
+            } else if (a === 'O') {
+                computer.winner();
+            }
+        }
+        
+
         // player marker for X
         function spaceSelectX(e) {
             e.target.textContent = 'X';
             e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
             gameBoard.push(e);
-            
-            
+            gameText.push('X');
         }
         // player marker for O
         function spaceSelectO(e){
             e.target.style.cssText = 'color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 100px;';
             e.target.textContent = 'O';
             gameBoard.push(e)
-            
-        }
-
-        // function for forcing turn order
-        function turnOrder(e) {
-    
-        switch (true) {
-        case turn == true:
-            spaceSelectX(e);            
-            turn = false;
-            break;
-            
-            case turn == false:
-                spaceSelectO(e);
-                turn = true;
-                break;
-            }
+            gameText.push('O');
         }
 
         return {
-            order: turnOrder
+            end: gameEnd,
+            winner: winner,
+            X: spaceSelectX,
+            O: spaceSelectO
+
         };      
 
     })();
-    
-    
-    
-    
-        
 
+GBModule.end();
+    
+ 
+ 
 // Function Factories for 'X' + 'O' Player Markers
 
 // Marker for 'X'
-const PlayerX = () => {
-    let space = document.querySelectorAll('td');
-    let markerLimit = true;
-    space.forEach(space => space.addEventListener('click', turnOrder));
 
-    function testSwitch() {
-        space.forEach(space => space.removeEventListener('click', turnOrder));
-        
-        markerLimit = false;
-        console.log(markerLimit);
+const PlayerX = (name) => {
+    
+    
+    const winner = () => {
+        if (name == undefined) {
+            console.log('X has won!');
+        } else if (name != undefined) {
+            console.log(`${name} has won!`);
+        }
+
     }
-      
     
-    
-    function turnOrder(e) { 
-        GBModule.order(e);
-        space.forEach(space => space.addEventListener('click', scoring));
-
-}   
-return {turnOrder, testSwitch}
+    return {winner}
 }
     
-    
+
 // Marker for 'O'!
-const PlayerO = () => {
-    let space = document.querySelectorAll('td');
-    let markerLimit = true;
-    space.forEach(space => space.addEventListener('click', turnOrder));
-
-    function testSwitch() {
-        space.forEach(space => space.removeEventListener('click', turnOrder));
-        markerLimit = false;
-    }        
+const PlayerO = (name) => {
+    const winner = () => {
+        if (name == undefined) {
+            console.log('X has won!');
+        } else if (name != undefined) {
+            console.log(`${name} has won!`);
+        }
+    }
     
-    function turnOrder(e) {   
-        GBModule.order(e);
-        space.forEach(space => space.addEventListener('click', scoring));
-        
-    }   
-    return {testSwitch, turnOrder}
+    return {winner}
 }
     
-// ---- Marker Selection ------
-
-// FIRST PLAYER 
+// playerX and playerO calls
 const firstPlayer = PlayerX();
-firstPlayer.turnOrder();
-firstPlayer.testSwitch();
-// COMPUTER
-
-const computer = PlayerO();
-computer.testSwitch();
-computer.turnOrder();
-// LOGIC FOR TURN ORDER
-        
+const computer = PlayerO();     
     
 
         
-// So basically - when pushing changes to repo through terminal
-// the order is: 
-// 1.   'git status'
-// to check to see that they're there with
+// // So basically - when pushing changes to repo through terminal
+// // the order is: 
+// // 1.   'git status'
+// // to check to see that they're there with
 
-// 2.   'git add .'
-// to add the changes 
+// // 2.   'git add .'
+// // to add the changes 
 
-// 3.   'git commit -m "comment here"'
-// to label your changes for organization
+// // 3.   'git commit -m "comment here"'
+// // to label your changes for organization
 
-// 4.   'git push'
-// to push the changes to your repo
+// // 4.   'git push'
+// // to push the changes to your repo
         
         
         
         
         
         
-   
+
+
+
+  
+
