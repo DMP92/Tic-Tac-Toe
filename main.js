@@ -59,11 +59,14 @@ function scoreTrack(index) {
         // middle row
         case gameBoard[3].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[5].textContent === 'X':
             console.log("X's Won!");
+            Scoring.gameX(index);
             firstPlayer.testSwitch();
         break;
         case gameBoard[3].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[5].textContent == 'O':
             console.log("O's Won!");
-            computer.testSwitch();
+            Scoring.gameO(index);
+            firstPlayer.testSwitch();
+
         break;
         // top row
         case gameBoard[0].textContent === 'X' && gameBoard[1].textContent === 'X' && gameBoard[2].textContent == 'X':
@@ -156,10 +159,36 @@ function scoreTrack(index) {
 
 // Module for tracking wins and ties
 var Scoring = (function(e) {
-    let gameBoard = [];
-    let gameModule = {};
     
-    return gameModule;
+function gameCount(index) {
+    let ex = 'X';
+    for (var i = 0; i<gameBoard.length; i++) {
+        if(gameBoard[i].textContent === ex) {
+            console.log(gameBoard[i])
+        }
+    }
+}
+
+function gameCountO(index) {
+    let oes = 'O';
+    console.log(index);
+    for (var i = 0; i<gameBoard.length; i++) {
+        if(gameBoard[i].textContent === oes) {
+            console.log(gameBoard[index])
+        }
+    }
+}
+
+function catGame(e) {
+    // thought about ref this function up in the loop for nodelist iterations, causing the 'this.index' 
+    // to push the number of the index to an array stored in here, and once all 8 array spots were filled, 
+    // calling it a cat's game - situationally based on whether or not anyone won or not obviously
+}
+
+    return {
+        gameX: gameCount,
+        gameO: gameCountO
+    }
 })();
 
 
@@ -168,57 +197,47 @@ var Scoring = (function(e) {
 
 // Module for TTT board rules
 var GBModule = (function() {
-// private variables   
-let gameBoard = [];
-let gameModule = {};
-let turn = true;
+        // private variables   
+        let gameBoard = [];
+        let turn = true;
+                
+        // player marker for X
+        function spaceSelectX(e) {
+            e.target.textContent = 'X';
+            e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
+            gameBoard.push(e);
+            
+            
+        }
+        // player marker for O
+        function spaceSelectO(e){
+            e.target.style.cssText = 'color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 100px;';
+            e.target.textContent = 'O';
+            gameBoard.push(e)
+            
+        }
 
-// collection of board spaces 
-let space = document.querySelectorAll('td');
-const boardSpaces = Array.from(space);
-gameBoard.push(boardSpaces);
-
-// player markers
-gameModule.spaceSelectionX = function (e) {
-    e.target.textContent = 'X';
-    e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
-    gameBoard.push(e);
+        // function for forcing turn order
+        function turnOrder(e) {
     
-    
-}
-
-gameModule.spaceSelectionO = function (e) {
-    e.target.style.cssText = 'color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 100px;';
-    e.target.textContent = 'O';
-    gameBoard.push(e)
-    
-}
-
-
-    
-// function for forcing turn order
-
-gameModule.turn = function (e) {
-    let space = document.querySelectorAll('td');
-    let boardSpaces = Array.from(space);
-    
-    switch (true) {
+        switch (true) {
         case turn == true:
-            GBModule.spaceSelectionX(e);
+            spaceSelectX(e);            
             turn = false;
             break;
             
             case turn == false:
-                GBModule.spaceSelectionO(e);
+                spaceSelectO(e);
                 turn = true;
                 break;
             }
         }
-        
-        return gameModule;
-        
+
+        return {
+            order: turnOrder
+        };      
+
     })();
-    
     
     
     
@@ -243,7 +262,7 @@ const PlayerX = () => {
     
     
     function turnOrder(e) { 
-        GBModule.turn(e);
+        GBModule.order(e);
         space.forEach(space => space.addEventListener('click', scoring));
 
 }   
@@ -263,7 +282,7 @@ const PlayerO = () => {
     }        
     
     function turnOrder(e) {   
-        GBModule.turn(e);
+        GBModule.order(e);
         space.forEach(space => space.addEventListener('click', scoring));
         
     }   
@@ -279,8 +298,8 @@ firstPlayer.testSwitch();
 // COMPUTER
 
 const computer = PlayerO();
-computer.turnOrder();
 computer.testSwitch();
+computer.turnOrder();
 // LOGIC FOR TURN ORDER
         
     
