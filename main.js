@@ -26,11 +26,15 @@ var gameStyle = (function() {
     // variables for PvP and PvE buttons
     let pvp = document.querySelector('.PvP');
     let pve = document.querySelector('.PvE');
+    let playStyleModal = document.querySelector('.playStyle');
+    let gameContainer = document.querySelector('.gameContainer');
+    let body = document.querySelector('body');
+
 
     // event listeners for playStyle modal
     window.addEventListener('load', playStyleOpen);
      pvp.addEventListener('click', playStyleClose);
-     pve.addEventListener('click', playStyleClose);
+     pve.addEventListener('click', pveModuleOpen);
 
     
 
@@ -46,9 +50,12 @@ var gameStyle = (function() {
     pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
     let winnerDeclared = document.querySelector('.declaredWinner');
     winnerDeclared.style.cssText = 'display: none; transition: all 0.4s ease; -webkit-transform: scale(.5);';    
+    let pve = document.querySelector('.pveModal');
+    pve.style.cssText = 'display: none;'
+    
     }
     
-    function playStyleClose() {
+        function playStyleClose() {
         let playStyleModal = document.querySelector('.playStyle');
         let gameContainer = document.querySelector('.gameContainer');
         let body = document.querySelector('body');
@@ -58,18 +65,18 @@ var gameStyle = (function() {
         playStyleModal.style.cssText = 'display: none; '
 
         pvp.addEventListener('click', nameModuleOpen);
-        pve.addEventListener('click', nameModuleOpen);
-    }
+
+        }
         
 
 
-    // event listeners for PvP modal
-    let pvpModal = document.querySelector('.pvpModal');
-    let first = document.querySelector('.first');
-    let second = document.querySelector('.second');
+        // event listeners for PvP modal
+        let pvpModal = document.querySelector('.pvpModal');
+        let first = document.querySelector('.first');
+        let second = document.querySelector('.second');
 
 
-    // modal for name input
+    // opens modal for name input
     function nameModuleOpen(condition) {
         let pvpModal = document.querySelector('.pvpModal');
         let playButt = document.querySelector('.playButt');
@@ -80,15 +87,47 @@ var gameStyle = (function() {
          // stopped in process of figuring best way to
         // send names to each factory - one for x and one for o
     }   
-    
-    function nameModuleClose() {
-        pvpModal.style.cssText ="display: none;";
-        let numOne = first.value;
-        let numTwo = second.value;
-        firstPlayer.winner(numOne);
-        computer.winner(numTwo);
-        
-    }   
+                
+        // closes modal for name input
+        function nameModuleClose() {
+            pvpModal.style.cssText ="display: none;";
+            let numOne = first.value;
+            let numTwo = second.value;
+            firstPlayer.winner(numOne);
+            computer.winner(numTwo);
+            
+        }   
+
+    // opens modal for pve difficulty
+    function pveModuleOpen() {
+        let pve = document.querySelector('.pveModal');
+        let pvePlay = document.querySelector('.pvePlay');
+
+        // styles for different elements
+        playStyleModal.style.cssText = 'display: none; ';
+        pvpModal.style.cssText = 'display: none;';
+        pve.style.cssText = 'display: grid;';
+        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: white;'
+        body.style.cssText = 'background-color: white;'
+
+        // event listener to start game vs computer
+        pvePlay.addEventListener('click', selectOption);
+
+    }
+        // closes modal && also determines player's choice of computer difficulty
+        function selectOption() {
+            let selection = document.querySelector('.pveSelect');
+            let pveModal = document.querySelector('.pveModal');
+            pveModal.style.cssText = 'display: none'; 
+
+            computerDifficulty(selection.value);
+        }
+
+        function computerDifficulty(value) {
+            
+            
+        }
+                
 
     return {
         closePS: playStyleClose()
@@ -121,7 +160,9 @@ var playAgainPrompt = (function() {
     function noPlay() {
 
     }
-    
+    return {
+        playAgain: playAgain
+    }
 })();
 
 // separates the NodeList of 'spaces' into 9 individual array places in the 'gameBoard' array
@@ -156,6 +197,7 @@ function scoring() {
 function scoreTrack(index) {
     spaces = document.querySelectorAll('td');
     let win = false;
+    console.log(typeof gameBoard[2].textContent);
 
     switch(true) {
         // middle row
@@ -251,7 +293,7 @@ function scoreTrack(index) {
         break;  
         default:
             if (gameText.length === 9 && win === false) {
-                console.log("Cat's Game!");
+                GBModule.cat();
                 GBModule.end(true);
             }    
     } 
@@ -309,7 +351,7 @@ var GBModule = (function() {
         let w = window.innerWidth;
         
         // function for ensuring turn order
-        function turnOrder(e) {     
+        function _turnOrder(e) {     
             switch (true) {
                 case turn == true:
                 if (e.target.textContent === '') {
@@ -339,12 +381,12 @@ var GBModule = (function() {
 
             switch(true) {
                 case game === true:
-                    spaces.forEach(space => space.removeEventListener('click', turnOrder));    
+                    spaces.forEach(space => space.removeEventListener('click', _turnOrder));    
                     spaces.forEach(space => space.removeEventListener('click', scoring));    
                 break;
                 
                 default:
-                    spaces.forEach(space => space.addEventListener('click', turnOrder));           
+                    spaces.forEach(space => space.addEventListener('click', _turnOrder));           
             }
         }
         
@@ -383,11 +425,20 @@ var GBModule = (function() {
           
         }
 
+        function catGame() {
+            let winnerDeclaredModal = document.querySelector('.declaredWinner');
+            let winnerDeclared = document.querySelector('.winh1');
+
+            winnerDeclared.textContent = "It's a draw!";
+            winnerDeclaredModal.style.cssText = 'display: grid;'
+        }
+
         return {
             end: gameEnd,
             winner: winner,
             X: spaceSelectX,
-            O: spaceSelectO
+            O: spaceSelectO,
+            cat: catGame
         };      
 
     })();
@@ -411,10 +462,10 @@ const PlayerX = (playername) => {
     
     
     // updates name when button 'Play' is clicked
-    const getName = () => {
+    const _getname = () => {
         name = first.value;
     }
-    playButt.addEventListener('click', getName);
+    playButt.addEventListener('click', _getname);
     
     
     
@@ -426,10 +477,10 @@ const PlayerX = (playername) => {
     
     // declares the winner
     const winner = (name) => {
-        if (name == undefined && gameStatus == true) {
-            winnerDeclared.textContent = 'X Has Won!';
+        if (name == '' && gameStatus == true) {
+            winnerDeclared.textContent = "X's win!";
             winnerDeclaredModal.style.cssText = 'display: grid;'
-        } else if (name != undefined && gameStatus == true) {
+        } else if (name != '' && gameStatus == true) {
             winnerDeclared.textContent = `${name} has won!`
             winnerDeclaredModal.style.cssText = 'display: grid;'
         }
@@ -450,10 +501,10 @@ const PlayerO = (playername) => {
     let winnerDeclared = document.querySelector('.winh1');
     
     // updates name when button 'Play' is clicked
-    const getName = () => {
+    const _getname = () => {
         name = second.value;
     }
-    playButt.addEventListener('click', getName);
+    playButt.addEventListener('click', _getname);
     
     // gets the name and gamestatus to the winner function
     const declareWinner = () => {
@@ -463,10 +514,10 @@ const PlayerO = (playername) => {
 
     // declares the winner
     const winner = (name) => {
-        if (name == undefined && gameStatus == true) {
-            winnerDeclared.textContent = 'O Has Won!';
+        if (name == '' && gameStatus == true) {
+            winnerDeclared.textContent = "O's win!";
             winnerDeclaredModal.style.cssText = 'display: grid;'
-        } else if (name != undefined && gameStatus == true) {
+        } else if (name != '' && gameStatus == true) {
             winnerDeclared.textContent = `${name} has won!`
             winnerDeclaredModal.style.cssText = 'display: grid; transition: all 0.4s ease; -webkit-transform: scale(1)'
         }
@@ -481,10 +532,23 @@ const computer = PlayerO();
     
 
 
+/* *********************** ended on friday the 28th of may 
+
+I will need to make two separate functions. One inside playerx the other in playerO
+they will have to get data from the PvE play button saying to clear the name input text field
+there will need to be two conditionals
+one that says you won / lost 
+the other saying the computer won
+
+Also I need to refactor and use _privateFunctionName on all of the private functions
+
+I need to create a module for the AI 
+
+also I could probably get more separation out of some 
+of the revealing module patterns I've created
 
 
-
-
+*/
 
 
         

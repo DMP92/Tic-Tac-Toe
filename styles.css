@@ -53,9 +53,13 @@ html body {
 @media screen and (max-width: 500px) {
     .gameContainer {
         display: grid;
-        width: 100%;
-        height: 100%;
+        width: 330px;
+        height: 800px;
         top: 50%;
+        left: 50%;
+        margin-top: -400px;
+        margin-left: -165px;
+        position: fixed;
         grid-template-columns: 100%;
         grid-template-rows: 20% 78%;
         grid-template-areas: 
@@ -70,10 +74,13 @@ html body {
 @media screen and (min-width: 501px) {
     .gameContainer {
         display: grid;
-        width: 100%;
-        height: 100%;
+        position: fixed;
+        width: 420px;
+        height: 800px;
         top: 50%;
         left: 50%;
+        margin-top: -400px;
+        margin-left: -220px;
         grid-template-columns: 60%;
         grid-template-rows: 25% 75%;
         grid-template-areas: 
@@ -747,5 +754,96 @@ i {
 .winButtDecline:active {
     background-color: #E3B23C;
     transform: scale(1);
+    transition: all .1s ease;
+}
+
+.pveModal {
+    position: fixed;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, 33%);
+    justify-items: center;
+    align-items: center;
+    grid-template-areas: 
+                "head"
+                "selection"
+                "play";
+    width: 380px;
+    height: 380px;
+    background-color: #1C6375;
+    top: 50%;
+    left: 50%;
+    margin-left: -190px;
+    margin-top: -190px;
+    z-index: 300;
+    border-radius: 3px;
+}
+
+.pveHead {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-area: "head";
+    grid-row: 1/2;
+    height: 80%;
+    width: 80%;
+    box-shadow: inset 0px 0px 13px black;
+    background-color: rgba(51, 172, 202, .5);
+
+}
+
+.pveSelect {
+    place-self: center center;
+    display: grid;
+    margin-bottom: -30px;
+    grid-area: "selection";
+    width: 80%;
+    height: 35%;
+    box-shadow:  0px 0px 2px rgba(0, 0, 0, 0.5);
+    outline: transparent;
+    border: transparent;
+    border-radius: 3px;
+    background-color: rgba(51, 172, 202, .5) !important;
+    color: white;
+    font-family: Avenir Next;
+    text-align: calc(100% -29px);
+    -moz-appearance: none;
+    background:
+    linear-gradient(45deg, transparent 50%, #005064 50%),
+    linear-gradient(135deg, #005064 50%, transparent 50%),
+    linear-gradient(to right, skyblue, skyblue);
+  background-position:
+    calc(101% - 25px) calc(1.3em + 2px),
+    calc(101% - 16px) calc(1.3em + 2px),
+    100% 0;
+  background-size:
+    10px 20px,
+    10px 20px,
+    4em 5em;
+    background-repeat: no-repeat;
+
+}
+
+.pvePlay {
+    background-color:  #005064;
+    height: 50%;
+    width: 80%;
+    outline: transparent;
+    border: transparent;
+    color: white;
+    font-size: 30px;
+    font-family: Avenir Next;
+    box-shadow: 0px 0px 15px #005064;
+}
+
+.pvePlay:hover {
+    background-color: rgba(51, 172, 202, .5);
+    transition: all ease .2s;
+    transform: scale(1);
+}
+
+.pvePlay:active {
+    background-color: #E3B23C;
+    transform: scale(.9);
     transition: all .1s ease;
 }
