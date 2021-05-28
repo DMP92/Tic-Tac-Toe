@@ -39,8 +39,8 @@ var gameStyle = (function() {
         let body = document.querySelector('body');
 
         body.style.cssText = 'background-color: black;'
-        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
-        playStyleModal.style.cssText = 'display: grid; border-radius: 2px'
+        gameContainer.style.cssText = 'transition: all 0.01ms ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
+        playStyleModal.style.cssText = 'border-radius: 2px'
         pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
     }
     
