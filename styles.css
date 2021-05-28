@@ -14,7 +14,7 @@ html body {
 
             /* for mobile in landscape mode */
 
-            /* game container  */
+            /* container div for all game modules */
 
 @media screen and (max-height: 450px) {
     .gameContainer {
@@ -37,6 +37,7 @@ html body {
         display: grid;
         width: 100%;
         height: 100%;
+        top: 50%;
         grid-template-columns: 100%;
         grid-template-rows: 20% 78%;
         grid-template-areas: 
@@ -54,6 +55,7 @@ html body {
         display: grid;
         width: 100%;
         height: 100%;
+        top: 50%;
         grid-template-columns: 100%;
         grid-template-rows: 20% 78%;
         grid-template-areas: 
@@ -70,14 +72,51 @@ html body {
         display: grid;
         width: 100%;
         height: 100%;
+        top: 50%;
+        left: 50%;
         grid-template-columns: 60%;
-        grid-template-rows: 5% 90%;
+        grid-template-rows: 25% 75%;
         grid-template-areas: 
                     "head"
                     "game";    
         justify-content: center;
         align-content: center;
         text-align: center;
+        grid-gap: 20px;
+    }
+}
+
+/* styles specifically for the table itself */
+
+/* game board table  */
+
+@media screen and (max-width: 550px) {
+    .TTT {
+        display: block;
+        outline: 0px transparent;
+        border: 0px transparent;
+        margin-top: 0px;
+        grid-area: 'game';
+        width: 370px;
+        height: 370px;
+        justify-self: center;
+        color: white;
+        font-family: Avenir Next;
+        position: relative;
+    }
+}
+@media screen and (min-width: 551px) {
+    .TTT {
+        display: block;
+        
+        grid-area: 'game';
+        width: 450px;
+        height: 450px;
+        justify-self: center;
+        color: white;
+        font-family: Avenir Next;
+        position: relative;
+
     }
 }
 
@@ -95,19 +134,20 @@ html body {
     filter: blur(1em) grayscale(40%);
 }
 
-/* tic tac toe logo */
+/* tic tac toe logo and text */
 .Tac {
     color: rgb(51, 172, 202);
     text-align: center;
 }
 
 .text{
-    z-index: 5;
+    margin-bottom: 20px;
     grid-area: 'head';
     justify-self: center;
-    align-self: start;
+    align-self: end;
     position: relative;
 }
+    
 
 
 h1 {
@@ -122,67 +162,464 @@ h1 {
     text-shadow: inset 2px 5px black;
 }
 
-/* game board table  */
 
-@media screen and (max-width: 500px) {
-    .TTT {
-        display: block;
-        outline: 0px transparent;
-        border: 0px transparent;
-        margin-top: 0px;
-        grid-area: 'game';
-        width: 350px;
-        height: 350px;
-        justify-self: center;
-        color: white;
-        font-size: 150px;
-        font-family: Avenir Next;
-        position: relative;
-    }
-}
-@media screen and (min-width: 501px) {
-    .TTT {
-        display: block;
-        
-        margin-top: 20px;
-        grid-area: 'game';
-        width: 450px;
-        height: 450px;
-        justify-self: center;
-        color: white;
-        font-size: 150px;
-        font-family: Avenir Next;
-        position: relative;
-
-    }
-}
 
 /* game board spaces */
 
-tr {
-    background-color: rgb(0, 80, 100);
-    padding: 0;
-    height: 147px;
-    width: 147px;
-    outline: transparent;
-    border: transparent;
+
+@media screen and (min-width: 551px) {
+    tr {
+        background-color: rgb(0, 80, 100);
+        padding: 0;
+        height: 147px;
+        outline: transparent;
+        border: transparent;
+    }
+    
 }
 
-td {
-    background-color: rgb(0, 80, 100);
-    padding: 0;
-    height: 147px;
-    width: 147px;
-    outline: transparent;
-    border: transparent;
+@media screen and (max-width: 550px) {
+    tr {
+        background-color: rgb(0, 80, 100);
+        padding: 0;
+        height: 120px !important;
+        width: 120px !important;
+        outline: transparent;
+        border: transparent;
+    }
+      
 }
 
+@media screen and (min-width: 551px) {
+    td {
+        background-color: rgb(0, 80, 100);
+        padding: 0;
+        width: 147px;
+        outline: transparent;
+        border: transparent;
+    }
+}
 
+@media screen and (max-width: 550px) {
+    td {
+        background-color: rgb(0, 80, 100);
+        padding: 0;
+        height: 120px !important;
+        width: 120px !important;
+        outline: transparent;
+        border: transparent;
+    }  
+}
 
 /* selection text-styles */
 
 p {
     color: white;
+    font-family: Avenir Next;
+    font-size: 30px;
+}
+
+/* Playstyle pop up modal */
+
+@media screen and (min-width: 551px) {
+    .playStyle {
+        display: none;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 50% 50%;
+        grid-template-areas: 
+                    "head head"
+                    "PvP PvE";
+        justify-items: center;
+        align-content: center;
+        position: fixed;
+        z-index: 100;
+        background-color: white;
+        box-shadow: 0px 0px 10px white;
+        width: 450px;
+        height: 450px;
+        top: 50%;
+        left: 50%;
+        margin-left: -225px;
+        margin-top: -225px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .playStyle {
+        display: none;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 50% 50%;
+        grid-template-areas: 
+                    "head head"
+                    "PvP PvE";
+        justify-items: center;
+        align-content: center;
+        position: fixed;
+        z-index: 100;
+        background-color: white;
+        box-shadow: 0px 0px 10px white;
+        width: 350px;
+        height: 350px;
+        top: 50%;
+        left: 50%;
+        margin-left: -175px;
+        margin-top: -175px;
+    }
 
 }
 
+.playStyle::before {
+    content: '';
+    z-index: 20;
+    position: absolute;
+    top: 50.5%;
+    left: 10;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .45);
+    transform: perspective(2em) rotateX(40deg) scale(1, .16);
+    filter: blur(5em);
+
+}
+
+/* playstyles header */
+
+@media screen and (min-width: 551px) {
+    .modalHead {
+        grid-area: 'head';
+        text-align: center;
+        color: whitesmoke;
+        font-family: Avenir Next;
+        height: 20%;
+        width: 90%;
+        box-shadow: 2px 2px 8px black;
+        border-radius: 5px;
+        background-color: #005064;
+        text-shadow: inset 2px 5px black;
+        grid-column: 1/3;
+        align-self: center;
+        
+    }
+    
+}
+
+@media screen and (max-width: 550px) {
+    .modalHead {
+        grid-area: 'head';
+        text-align: center;
+        color: whitesmoke;
+        font-family: Avenir Next;
+        height: 55%;
+        width: 95%;
+        box-shadow: 2px 2px 8px black;
+        border-radius: 5px;
+        background-color: #005064;
+        text-shadow: inset 2px 5px black;
+        grid-column: 1/3;
+        align-self: center;
+        
+    }
+     
+}
+
+/* playstyles pvp button */
+
+@media screen and (min-width: 551px) {
+    .PvP {
+        grid-area: 'PvP';
+        background-color: #005064;
+        border-radius: 5px;
+        border: transparent;
+        width: 90%;
+        height: 80%;
+        align-self: start;
+        justify-self: center;
+        box-shadow: 2px 2px 8px black;
+        color: whitesmoke;
+        font-family: Avenir Next;
+        font-size: 30px;
+        font-style: bold;
+    }
+}
+
+
+@media screen and (max-width: 550px) {
+    .PvP {
+        grid-area: 'PvP';
+        background-color: #005064;
+        border-radius: 5px;
+        border: transparent;
+        width: 90%;
+        height: 80%;
+        align-self: start;
+        justify-self: center;
+        box-shadow: 2px 2px 8px black;
+        color: whitesmoke;
+        font-family: Avenir Next;
+        font-size: 30px;
+        font-style: bold;
+    }
+}
+
+
+.PvP:hover {
+    background-color: #106c83;
+}
+
+.PvP:focus {
+    background-color: white;
+}
+
+/* playstyles pve button */
+
+
+@media screen and (min-width: 551px) {
+    .PvE {
+        grid-area: 'PvE';
+        border-radius: 5px;
+        background-color: #005064;
+        box-shadow: 2px 2px 8px black;
+        border: transparent;
+        width: 90%;
+        height: 80%;
+        align-self: start;
+        justify-self: center;
+        color: whitesmoke;
+        font-family: Avenir Next;
+        font-size: 30px;
+    
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .PvE {
+        grid-area: 'PvE';
+        border-radius: 5px;
+        background-color: #005064;
+        box-shadow: 2px 2px 8px black;
+        border: transparent;
+        width: 90%;
+        height: 80%;
+        align-self: start;
+        justify-self: center;
+        color: whitesmoke;
+        font-family: Avenir Next;
+        font-size: 30px;
+    
+    } 
+}
+
+.PvE:hover {
+    background-color: #106c83;
+}
+
+.PvE:focus {
+    background-color: white;
+
+}
+
+i {
+    color: #E3B23C;
+}
+
+/* PvP Modal styles */
+@media screen and (min-width: 551px) {
+    .pvpModal {
+        display: grid;
+        position: fixed;
+        grid-template-rows: repeat(5, 20%);
+        grid-template-columns: 100%;
+        grid-template-areas: 
+                    "first"
+                    "firstInp"
+                    "second"
+                    "secondInp"
+                    "play";
+        justify-items: center;
+        align-items: center;
+        top: 50%;
+        left: 50%;
+        width: 500px;
+        height: 500px;
+        z-index: 90;
+        margin-left: -250px;
+        margin-top: -250px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px black;
+        background-color: #1C6375;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .pvpModal {
+        display: grid;
+        position: fixed;
+        grid-template-rows: repeat(5, 20%);
+        grid-template-columns: 100%;
+        grid-template-areas: 
+                    "first"
+                    "firstInp"
+                    "second"
+                    "secondInp"
+                    "play";
+        justify-items: center;
+        align-items: center;
+        top: 50%;
+        left: 50%;
+        width: 380px;
+        height: 380px;
+        z-index: 90;
+        margin-left: -190px;
+        margin-top: -190px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px black;
+        background-color: #1C6375;
+    }
+}
+
+@media screen and (min-width: 551px) {
+    .firsth2 {
+        grid-area: "first";
+        width: 80%;
+        color: white;
+        font-family: Avenir Next;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .firsth2 {
+        grid-area: "first";
+        width: 80%;
+        color: white;
+        font-family: Avenir Next;
+    }
+}
+@media screen and (min-width: 551px) {
+    .first {
+        grid-area: "firstInp";
+        width: 80%;
+        height: 80%;
+        text-indent: 30px;
+        background-color: rgba(51, 172, 202, .5);
+        outline: transparent;
+        border: transparent;
+        border-radius: 2px;
+        box-shadow: inset 0px 0px 13px black;
+        color: white;
+        font-size: 20px;
+        font-family: Avenir Next;
+    
+    }
+    
+}
+
+@media screen and (max-width: 550px) {
+    .first {
+        grid-area: "firstInp";
+        width: 80%;
+        height: 80%;
+        text-indent: 30px;
+        background-color: rgba(51, 172, 202, .5);
+        outline: transparent;
+        border: transparent;
+        border-radius: 2px;
+        box-shadow: inset 0px 0px 13px black;
+        color: white;
+        font-size: 20px;
+        font-family: Avenir Next;
+    
+    }
+    
+}
+@media screen and (min-width: 551px) {
+    .secondh2 {
+        grid-area: "second";
+        color: white;
+        font-family: Avenir Next;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .secondh2 {
+        grid-area: "second";
+        color: white;
+        font-family: Avenir Next;
+    }
+}
+@media screen and (min-width: 551px) {
+    .second {
+        grid-area: "secondInp";
+        background-color: rgba(51, 172, 202, .5);
+        outline: transparent;
+        border: transparent;
+        border-radius: 2px;
+        box-shadow: inset 0px 0px 13px black;
+        width: 80%;
+        height: 80%;
+        text-indent: 30px;
+        color: white;
+        font-size: 20px;
+        font-family: Avenir Next;
+    
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .second {
+        grid-area: "secondInp";
+        background-color: rgba(51, 172, 202, .5);
+        outline: transparent;
+        border: transparent;
+        border-radius: 2px;
+        box-shadow: inset 0px 0px 13px black;
+        width: 80%;
+        height: 80%;
+        text-indent: 30px;
+        color: white;
+        font-size: 20px;
+        font-family: Avenir Next;
+    
+    }
+}
+@media screen and (min-width: 551px) {
+    .playButt {
+        grid-area: "play";
+        color: white;
+        font-size: 30px;
+        font-family: Avenir Next;
+        background-color:  #005064;
+        outline: transparent;
+        border: 0px transparent;
+        width: 50%;
+        height: 50%;
+        border-radius: 2px;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, .55);
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .playButt {
+        grid-area: "play";
+        color: white;
+        font-size: 30px;
+        font-family: Avenir Next;
+        background-color:  #005064;
+        outline: transparent;
+        border: 0px transparent;
+        width: 50%;
+        height: 60%;
+        border-radius: 2px;
+        box-shadow: 0px 0px 4.5px rgba(0, 0, 0, .55);
+        }
+}
+
+.playButt:hover {
+    background-color: rgba(51, 172, 202, .5);
+    transition: all .2s;
+}
+
+.playButt:active {
+    background-color: #E3B23C;
+    transition: all .1ms ease;
+    transform: scale(.95);
+}

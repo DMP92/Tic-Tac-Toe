@@ -20,6 +20,77 @@ let gameBoard = [];
 let gameText = [];
 
 
+// module for game style choice (two players vs each other, or one player vs the computer)
+
+var gameStyle = (function() {
+    // variables for PvP and PvE buttons
+    let pvp = document.querySelector('.PvP');
+    let pve = document.querySelector('.PvE');
+
+    // event listeners for playStyle modal
+    window.addEventListener('load', playStyleOpen);
+     pvp.addEventListener('click', playStyleClose);
+     pve.addEventListener('click', playStyleClose);
+
+    // modal for playstyle choice (pvp or pve)
+    function playStyleOpen() {
+        let playStyleModal = document.querySelector('.playStyle');
+        let gameContainer = document.querySelector('.gameContainer');
+        let body = document.querySelector('body');
+
+        body.style.cssText = 'background-color: black;'
+        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
+        playStyleModal.style.cssText = 'display: grid; border-radius: 2px'
+        pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
+    }
+    
+    function playStyleClose() {
+        let playStyleModal = document.querySelector('.playStyle');
+        let gameContainer = document.querySelector('.gameContainer');
+        let body = document.querySelector('body');
+        
+        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: white;'
+        body.style.cssText = 'background-color: white;'
+        playStyleModal.style.cssText = 'display: none;'
+
+        pvp.addEventListener('click', nameModuleOpen);
+        pve.addEventListener('click', nameModuleOpen);
+    }
+        
+
+
+    // event listeners for PvP modal
+    let pvpModal = document.querySelector('.pvpModal');
+    let first = document.querySelector('.first');
+    let second = document.querySelector('.second');
+
+
+    // modal for name input
+    function nameModuleOpen(condition) {
+        let pvpModal = document.querySelector('.pvpModal');
+        let playButt = document.querySelector('.playButt');
+        pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0%);"
+      
+        playButt.addEventListener('click', nameModuleClose);
+        playButt.addEventListener('click', winnersName); // stopped in process of figuring best way to
+        // send names to each factory - one for x and one for o
+    }   
+    
+    function nameModuleClose() {
+        pvpModal.style.cssText ="display: none;";
+        let numOne = first.value;
+        let numTwo = second.value;
+        firstPlayer.winner(numOne);
+        computer.winner(numTwo);
+        
+    }   
+
+    return {
+        closePS: playStyleClose()
+    }
+})();
+
+
 // separates the NodeList of 'spaces' into 9 individual array places in the 'gameBoard' array
 function singleSpace() {
     let spaces = document.querySelectorAll('td');
@@ -52,7 +123,7 @@ function scoring() {
 function scoreTrack(index) {
     spaces = document.querySelectorAll('td');
     console.log(index);
-    
+    let win = false;
 
     switch(true) {
         // middle row
@@ -130,7 +201,12 @@ function scoreTrack(index) {
         case gameBoard[6].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[2].textContent === 'O':
             GBModule.winner('O');
             GBModule.end(true);
-        break;      
+        break;  
+        default:
+            if (gameText.length === 9 && win === false) {
+                console.log("Cat's Game!");
+                GBModule.end(true);
+            }    
     } 
 }     
 
@@ -180,26 +256,36 @@ var GBModule = (function() {
         let gameBoard = [];
         let turn = true;
         let spaces = document.querySelectorAll('td');
+
+        // window width
+
+        let w = window.innerWidth;
         
-        // function for forcing turn order
+        // function for ensuring turn order
         function turnOrder(e) {     
             switch (true) {
                 case turn == true:
+                if (e.target.textContent === '') {
                     gameText.push('X');
                     spaceSelectX(e); 
                     spaces.forEach(space => space.addEventListener('click', scoring));           
                     turn = false;
-                break;
-                
-                case turn == false:
-                    gameText.push('O');
-                    spaceSelectO(e);
-                    spaces.forEach(space => space.addEventListener('click', scoring));           
-                    turn = true;
-                break;
+                } else {
+
                 }
-        }
-        
+                break;
+                case turn == false:
+                   if (e.target.textContent === '') {
+                       gameText.push('O');
+                       spaceSelectO(e);
+                       spaces.forEach(space => space.addEventListener('click', scoring));           
+                       turn = true;
+                    }
+                 break;
+                 }
+         }
+
+           
         // function that stops all event listeners after someone wins
         function gameEnd(a) {
             let game = a;
@@ -228,16 +314,30 @@ var GBModule = (function() {
         // player marker for X
         function spaceSelectX(e) {
             e.target.textContent = 'X';
-            e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
+            if (w >= 551){
+                console.log(551);
+                e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
+            } else if (w <= 550) {
+                e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 75px;';
+                console.log(550)
+            }
+
             gameBoard.push(e);
-            gameText.push('X');
+           
         }
         // player marker for O
         function spaceSelectO(e){
-            e.target.style.cssText = 'color: rgb(255, 255, 255); margin: 0px; padding: 0px; font-size: 100px;';
+            if (w >= 551){
+                console.log(551);
+
+                e.target.style.cssText = 'color: white; margin: 0px; padding: 0px; font-size: 100px;';
+            } else if (w <= 550) {
+                e.target.style.cssText = 'color: white; margin: 0px; padding: 0px; font-size: 75px;';
+                console.log(550)
+            }            
             e.target.textContent = 'O';
             gameBoard.push(e)
-            gameText.push('O');
+          
         }
 
         return {
@@ -245,7 +345,6 @@ var GBModule = (function() {
             winner: winner,
             X: spaceSelectX,
             O: spaceSelectO
-
         };      
 
     })();
@@ -259,9 +358,14 @@ GBModule.end();
 // Marker for 'X'
 
 const PlayerX = (name) => {
+    let first = document.querySelector('.first');
+    let second = document.querySelector('.second');
     
+    const winnersName = (winner) => {
+
+    }
     
-    const winner = () => {
+    const winner = (name) => {
         if (name == undefined) {
             console.log('X has won!');
         } else if (name != undefined) {
@@ -278,7 +382,7 @@ const PlayerX = (name) => {
 const PlayerO = (name) => {
     const winner = () => {
         if (name == undefined) {
-            console.log('X has won!');
+            console.log('O has won!');
         } else if (name != undefined) {
             console.log(`${name} has won!`);
         }
@@ -291,6 +395,13 @@ const PlayerO = (name) => {
 const firstPlayer = PlayerX();
 const computer = PlayerO();     
     
+
+
+
+
+
+
+
 
         
 // // So basically - when pushing changes to repo through terminal
