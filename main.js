@@ -32,6 +32,8 @@ var gameStyle = (function() {
      pvp.addEventListener('click', playStyleClose);
      pve.addEventListener('click', playStyleClose);
 
+    
+
     // modal for playstyle choice (pvp or pve)
     function playStyleOpen() {
         let playStyleModal = document.querySelector('.playStyle');
@@ -41,7 +43,9 @@ var gameStyle = (function() {
         body.style.cssText = 'background-color: black;'
         gameContainer.style.cssText = 'transition: all 0.01ms ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
         playStyleModal.style.cssText = 'border-radius: 2px'
-        pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
+    pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
+    let winnerDeclared = document.querySelector('.declaredWinner');
+    winnerDeclared.style.cssText = 'display: none; transition: all 0.4s ease; -webkit-transform: scale(.5);';    
     }
     
     function playStyleClose() {
@@ -51,7 +55,7 @@ var gameStyle = (function() {
         
         gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: white;'
         body.style.cssText = 'background-color: white;'
-        playStyleModal.style.cssText = 'display: none;'
+        playStyleModal.style.cssText = 'display: none; '
 
         pvp.addEventListener('click', nameModuleOpen);
         pve.addEventListener('click', nameModuleOpen);
@@ -72,7 +76,8 @@ var gameStyle = (function() {
         pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0%);"
       
         playButt.addEventListener('click', nameModuleClose);
-        playButt.addEventListener('click', winnersName); // stopped in process of figuring best way to
+        playButt.addEventListener('click', PlayerX);
+         // stopped in process of figuring best way to
         // send names to each factory - one for x and one for o
     }   
     
@@ -90,6 +95,34 @@ var gameStyle = (function() {
     }
 })();
 
+// module for the declaredWinner modal a.k.a - ('play again?' prompt)
+var playAgainPrompt = (function() {
+    let declaredWinner = document.querySelector('.declaredWinner');
+    let play = document.querySelector('.winButtPlay');
+    let decline = document.querySelector('.winButtDecline');
+
+    play.addEventListener('click', playAgain);
+    decline.addEventListener('click', noPlay);
+
+    function playAgain() {
+        for (var i = 0; i < gameBoard.length; i++) {
+            if(gameBoard[i].textContent != '') {
+                gameBoard[i].textContent = '';
+                GBModule.end(false);  
+            }
+           
+            
+        }
+        gameText.length = 0;
+        declaredWinner.style.cssText = 'display: none;';
+        
+    }
+
+    function noPlay() {
+
+    }
+    
+})();
 
 // separates the NodeList of 'spaces' into 9 individual array places in the 'gameBoard' array
 function singleSpace() {
@@ -122,84 +155,98 @@ function scoring() {
 // logic behind wins and lose and draw
 function scoreTrack(index) {
     spaces = document.querySelectorAll('td');
-    console.log(index);
     let win = false;
 
     switch(true) {
         // middle row
         case gameBoard[3].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[5].textContent === 'X':
             GBModule.winner('X');
-            Scoring.gameX(index);
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[3].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[5].textContent == 'O':
             GBModule.winner('O');
-            Scoring.gameO(index);
+            computer.declareWinner();
             GBModule.end(true);
+
 
         break;
         // top row
         case gameBoard[0].textContent === 'X' && gameBoard[1].textContent === 'X' && gameBoard[2].textContent == 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[1].textContent === 'O' && gameBoard[2].textContent == 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;
         // bottom row
         case gameBoard[6].textContent === 'X' && gameBoard[7].textContent === 'X' && gameBoard[8].textContent == 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[7].textContent === 'O' && gameBoard[8].textContent == 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;
         // left column
         case gameBoard[0].textContent === 'X' && gameBoard[3].textContent === 'X' && gameBoard[6].textContent == 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[3].textContent === 'O' && gameBoard[6].textContent == 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;
         // middle column
         case gameBoard[1].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[7].textContent == 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[1].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[7].textContent == 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;
         // right column
         case gameBoard[2].textContent === 'X' && gameBoard[5].textContent === 'X' && gameBoard[8].textContent == 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         
         case gameBoard[2].textContent === 'O' && gameBoard[5].textContent === 'O' && gameBoard[8].textContent == 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;
         // top left to bottom right diagonal
         case gameBoard[0].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[8].textContent == 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[0].textContent == 'O' && gameBoard[4].textContent == 'O' && gameBoard[8].textContent == 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;
         // top right to bottom left diagonal
         case gameBoard[6].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[2].textContent === 'X':
             GBModule.winner('X');
+            firstPlayer.declareWinner();
             GBModule.end(true);
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[2].textContent === 'O':
             GBModule.winner('O');
+            computer.declareWinner();
             GBModule.end(true);
         break;  
         default:
@@ -315,11 +362,9 @@ var GBModule = (function() {
         function spaceSelectX(e) {
             e.target.textContent = 'X';
             if (w >= 551){
-                console.log(551);
                 e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
             } else if (w <= 550) {
                 e.target.style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 75px;';
-                console.log(550)
             }
 
             gameBoard.push(e);
@@ -328,12 +373,10 @@ var GBModule = (function() {
         // player marker for O
         function spaceSelectO(e){
             if (w >= 551){
-                console.log(551);
 
                 e.target.style.cssText = 'color: white; margin: 0px; padding: 0px; font-size: 100px;';
             } else if (w <= 550) {
                 e.target.style.cssText = 'color: white; margin: 0px; padding: 0px; font-size: 75px;';
-                console.log(550)
             }            
             e.target.textContent = 'O';
             gameBoard.push(e)
@@ -357,38 +400,79 @@ GBModule.end();
 
 // Marker for 'X'
 
-const PlayerX = (name) => {
+const PlayerX = (playername) => {
     let first = document.querySelector('.first');
-    let second = document.querySelector('.second');
+    let name = undefined;
+    let gameStatus = false;
+    let playButt = document.querySelector('.playButt');
+    let winnerDeclaredModal = document.querySelector('.declaredWinner');
+    let winnerDeclared = document.querySelector('.winh1');
     
-    const winnersName = (winner) => {
-
+    
+    
+    // updates name when button 'Play' is clicked
+    const getName = () => {
+        name = first.value;
+    }
+    playButt.addEventListener('click', getName);
+    
+    
+    
+    // gets the name and gamestatus to the winner function
+    const declareWinner = () => {
+        gameStatus = true;
+        winner(name)
     }
     
+    // declares the winner
     const winner = (name) => {
-        if (name == undefined) {
-            console.log('X has won!');
-        } else if (name != undefined) {
-            console.log(`${name} has won!`);
+        if (name == undefined && gameStatus == true) {
+            winnerDeclared.textContent = 'X Has Won!';
+            winnerDeclaredModal.style.cssText = 'display: grid;'
+        } else if (name != undefined && gameStatus == true) {
+            winnerDeclared.textContent = `${name} has won!`
+            winnerDeclaredModal.style.cssText = 'display: grid;'
         }
 
     }
     
-    return {winner}
+    return {winner, declareWinner}
 }
     
 
 // Marker for 'O'!
-const PlayerO = (name) => {
-    const winner = () => {
-        if (name == undefined) {
-            console.log('O has won!');
-        } else if (name != undefined) {
-            console.log(`${name} has won!`);
+const PlayerO = (playername) => {
+    let second = document.querySelector('.second');
+    let name = second.value;
+    let gameStatus = false;
+    let playButt = document.querySelector('.playButt');
+    let winnerDeclaredModal = document.querySelector('.declaredWinner');
+    let winnerDeclared = document.querySelector('.winh1');
+    
+    // updates name when button 'Play' is clicked
+    const getName = () => {
+        name = second.value;
+    }
+    playButt.addEventListener('click', getName);
+    
+    // gets the name and gamestatus to the winner function
+    const declareWinner = () => {
+        gameStatus = true;
+        winner(name)
+    }
+
+    // declares the winner
+    const winner = (name) => {
+        if (name == undefined && gameStatus == true) {
+            winnerDeclared.textContent = 'O Has Won!';
+            winnerDeclaredModal.style.cssText = 'display: grid;'
+        } else if (name != undefined && gameStatus == true) {
+            winnerDeclared.textContent = `${name} has won!`
+            winnerDeclaredModal.style.cssText = 'display: grid; transition: all 0.4s ease; -webkit-transform: scale(1)'
         }
     }
     
-    return {winner}
+    return {winner, declareWinner}
 }
     
 // playerX and playerO calls
