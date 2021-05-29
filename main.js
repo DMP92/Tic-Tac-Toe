@@ -35,6 +35,7 @@ var gameStyle = (function() {
     window.addEventListener('load', playStyleOpen);
      pvp.addEventListener('click', playStyleClose);
      pve.addEventListener('click', pveModuleOpen);
+     
 
     
 
@@ -43,14 +44,14 @@ var gameStyle = (function() {
         let playStyleModal = document.querySelector('.playStyle');
         let gameContainer = document.querySelector('.gameContainer');
         let body = document.querySelector('body');
-
+        let winnerDeclared = document.querySelector('.declaredWinner');
+        let pve = document.querySelector('.pveModal');
+        
         body.style.cssText = 'background-color: black;'
         gameContainer.style.cssText = 'transition: all 0.01ms ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
         playStyleModal.style.cssText = 'border-radius: 2px'
     pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
-    let winnerDeclared = document.querySelector('.declaredWinner');
     winnerDeclared.style.cssText = 'display: none; transition: all 0.4s ease; -webkit-transform: scale(.5);';    
-    let pve = document.querySelector('.pveModal');
     pve.style.cssText = 'display: none;'
     
     }
@@ -59,7 +60,11 @@ var gameStyle = (function() {
         let playStyleModal = document.querySelector('.playStyle');
         let gameContainer = document.querySelector('.gameContainer');
         let body = document.querySelector('body');
-        
+        let first = document.querySelector('.first');
+        let second = document.querySelector('.second');
+        first.value = '';
+        second.value = '';
+
         gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: white;'
         body.style.cssText = 'background-color: white;'
         playStyleModal.style.cssText = 'display: none; '
@@ -394,6 +399,7 @@ var GBModule = (function() {
             
             if (a === 'X') {
                 firstPlayer.winner();
+                turn = true;
             } else if (a === 'O') {
                 computer.winner();
             }
