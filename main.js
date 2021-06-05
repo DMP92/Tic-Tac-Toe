@@ -650,22 +650,32 @@ var AIGame = (function() {
         function turnOrder(index) {
             
             if (power === 'on') {
-               console.log(index);
                 if (turn === 'AI'){
+                    console.log(index);
                     // changes size of 'X' based on screen size
                     if (w >= 551){
                         gameBoard[index].textContent = 'X';
                         gameBoard[index].style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
+                        
+                        // players turn
+
+                        turn = 'human';
+                        console.log(turn + ', AI has gone. It is your turn');
+                        board.splice(index, 1, 'X');  
+                        console.log(board);
+                        scoreTrack(index);
                     } else if (w <= 550) {
                         gameBoard[index].textContent = 'X';
                         gameBoard[index].style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 75px;';
+                        // players turn
+
+                        turn = 'human';
+                        console.log(turn + ', AI has gone. It is your turn');
+                        board.splice(index, 1, 'X');  
+                        console.log(board);
+                        scoreTrack(index);
                     }
-                    // players turn
-                    turn = 'human';
-                    console.log(turn + ', AI has gone. It is your turn');
-                    console.log(board);
-                    board.splice(index, 1, 'X');  
-                    scoreTrack(index);
+                    
                 } else if (turn == 'human') {
                    
                 }
@@ -724,7 +734,7 @@ function checkWinner() {
     let winner = undefined;
   
     // horizontal
-    for (let i = 0; i < gameBoard.length; i++) {
+    for (let i = 0; i < board.length; i++) {
       if (equals3(board[0], board[1], board[2])) {
         winner = board[0];
       } else if (equals3(board[3], board[4], board[5])) {
@@ -734,7 +744,7 @@ function checkWinner() {
     }
   
     // Vertical
-    for (let i = 0; i < gameBoard.length; i++) {
+    for (let i = 0; i < board.length; i++) {
         if (equals3(board[0], board[3], board[6])) {
             winner = board[0];
           } else if (equals3(board[1], board[4], board[7])) {
@@ -753,12 +763,10 @@ function checkWinner() {
     }
   
     let openSpots = 0;
-    for (let i = 0; i < gameBoard.length; i++) {
-      
+    for (let i = 0; i < board.length; i++) {
+     
           openSpots++;
-        
-      
-    }
+     
   
     if (winner == undefined && openSpots == 0) {
       return 'tie';
@@ -766,7 +774,7 @@ function checkWinner() {
       return winner;
     }
   }
-} 
+} }
 /* *********************** ended on friday the 28th of may 
 
 I will need to make two separate functions. One inside playerx the other in playerO

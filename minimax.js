@@ -4,22 +4,21 @@ function bestMove() {
     // AI to make its turn
 
     let bestScore = -Infinity;
-
+    let move;
     for (var i = 0; i < gameBoard.length; i++) {
-
         // Is the spot available?
         if (board[i] === '') {
-
-            board[i] = 'X';
+            board[i] = ai;
             let score = minimax(board, 0, false);
             board[i] = '';
             if (score > bestScore) {
                 bestScore = score;
-                AIGame.turns(i);
+                move = {i};
+
             }
         } else { }
     }
-    AIGame.turns(i);
+    AIGame.turns(move.i);
     currentPlayer = human;
 }
 let scores = {
@@ -44,7 +43,6 @@ function minimax(board, depth, isMaximizing) {
     if (isMaximizing) {
         let bestScore = -Infinity;
         for (var i = 0; i < gameBoard.length; i++) {
-
 
 
             // Is the spot available?
