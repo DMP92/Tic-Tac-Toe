@@ -150,7 +150,6 @@ var gameStyle = (function() {
         pveModal.style.cssText = 'display: none'; 
         first.value = 'X';
         second.value = 'O';
-        console.log(first.value, second.value);
         // determines which parts of code run
         if (selection.value == '2') {
              bestMove();
@@ -735,7 +734,6 @@ var AIGame = (function() {
         let gameStatus = 'playing';
         
         function currentGameStatus(status) {
-            console.log(gameStatus);
             gameStatus = status;
 
         }
@@ -782,7 +780,6 @@ var AIGame = (function() {
         }
         
         function aiRandom() {
-            console.log(gameStatus);
             
             if(power === 'on 1' && gameStatus != 'game over') {
                 let randomMove = Math.floor(Math.random() * gameBoard.length);
