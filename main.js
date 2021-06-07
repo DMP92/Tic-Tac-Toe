@@ -128,14 +128,15 @@ var gameStyle = (function() {
         let selection = document.querySelector('.pveSelect');
         let pve = document.querySelector('.pveModal');
         let pvePlay = document.querySelector('.pvePlay');
-
+        
         // styles for different elements
         playStyleModal.style.cssText = 'display: none; ';
         pvpModal.style.cssText = 'display: none;';
         pve.style.cssText = 'display: grid;';
         gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: transparent;'
         body.style.cssText = 'background-color: white;'
-
+        first.value = null;
+        second.value = null;
         // event listener to start game vs computer
         pvePlay.addEventListener('click', selectOption);
 
@@ -147,18 +148,20 @@ var gameStyle = (function() {
         let selection = document.querySelector('.pveSelect');
         let pveModal = document.querySelector('.pveModal');
         pveModal.style.cssText = 'display: none'; 
-        
+        first.value = 'X';
+        second.value = 'O';
+        console.log(first.value, second.value);
         // determines which parts of code run
         if (selection.value == '2') {
              bestMove();
              GBModule.power('off');
-             firstPlayer.power('off');
+             firstPlayer.winner('X');
              computer.power('off');
             AIGame.switch('on 2');
             playAgainPrompt.playAgain('on');
         } else if (selection.value == '1') {
             GBModule.power('off');
-            firstPlayer.power('off');
+            firstPlayer.winner('X');
             computer.power('off');
             AIGame.switch('on 1');
             AIGame.random();
@@ -528,10 +531,10 @@ var GBModule = (function() {
         function winner(a) {
             
             if (a === 'X') {
-                firstPlayer.winner();
+                firstPlayer.declareWinner();
                 turn = true;
             } else if (a === 'O') {
-                computer.winner();
+                computer.declareWinner();
             } else {
                 turn = true;
             }
@@ -598,7 +601,7 @@ GBModule.end();
 const PlayerX = (playername) => {
     // switch that enables factory depending on mode chosen
     const power = (status) => {
-        let power = 'off';
+        let power = status;
         return power;
     }
 
@@ -628,18 +631,18 @@ const PlayerX = (playername) => {
     // declares the winner
     const winner = (name) => {
        
-        if (power() === 'off') {
-            name = 'X';
             if (name == '' && gameStatus == true) {
                 winnerDeclared.textContent = "X's win!";
                 winnerDeclaredModal.style.cssText = 'display: grid;'
-            } else if (name != '' && gameStatus == true) {
+            } else if (name != '' && gameStatus == true && name != undefined) {
                 winnerDeclared.textContent = `${name} has won!`
                 winnerDeclaredModal.style.cssText = 'display: grid;'
             } else if (name === undefined) {
                 winnerDeclared.textContent = "X's win!";
+                winnerDeclaredModal.style.cssText = 'display: grid;'
+
             }
-        }
+        
 
     }
     
@@ -649,10 +652,11 @@ const PlayerX = (playername) => {
 
 // Marker for 'O'!
 const PlayerO = (playername) => {
+    let powerSwitch = 'on'
 // switch that shuts on and off depending on game mode chosen
     const power = (status) => {
-        let power = 'off';
-        return power;
+        powerSwitch = status;
+        
     }
 
     let second = document.querySelector('.second');
@@ -676,14 +680,22 @@ const PlayerO = (playername) => {
 
     // declares the winner
     const winner = (name) => {
-        if (name == '' && gameStatus == true) {
+        if (powerSwitch === 'off') {
             winnerDeclared.textContent = "O's win!";
             winnerDeclaredModal.style.cssText = 'display: grid;'
-        } else if (name != '' && gameStatus == true) {
-            winnerDeclared.textContent = `${name} has won!`;
-            winnerDeclaredModal.style.cssText = 'display: grid; transition: all 0.4s ease; -webkit-transform: scale(1)';
-        } else if (name === undefined) {
-            winnerDeclared.textContent = "O's win!";
+        } else if (powerSwitch === 'on') {
+
+            if (name == '' && gameStatus == true) {
+                winnerDeclared.textContent = "O's win!";
+                winnerDeclaredModal.style.cssText = 'display: grid;'
+            } else if (name != '' && gameStatus == true && name != undefined) {
+                winnerDeclared.textContent = `${name} has won!`;
+                winnerDeclaredModal.style.cssText = 'display: grid;'
+            } else if (name === undefined) {
+                winnerDeclared.textContent = "O's win!";
+                winnerDeclaredModal.style.cssText = 'display: grid;'
+                
+            }
         }
     }
     
