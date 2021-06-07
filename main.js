@@ -13,7 +13,7 @@
     the looping function directly with an event listener
     
 */
-
+var aiMode = 'off';
 var myMove = false;
 // global copies of both needed arrays
 let gameBoard = [];
@@ -60,7 +60,7 @@ var gameStyle = (function() {
         let pve = document.querySelector('.pveModal');
         
         body.style.cssText = 'background-color: black;'
-        gameContainer.style.cssText = 'transition: all 0.01ms ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
+        gameContainer.style.cssText = 'display: none; transition: all 0.01ms ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);'
         playStyleModal.style.cssText = 'border-radius: 2px'
         pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);"
         winnerDeclared.style.cssText = 'display: none; transition: all 0.4s ease; -webkit-transform: scale(.5);';    
@@ -107,7 +107,8 @@ var gameStyle = (function() {
                 
         // closes modal for name input
     function nameModuleClose() {
-        pvpModal.style.cssText ="display: none;";
+        winnerDeclared = document.querySelector('.declaredWinner');
+        pvpModal.style.cssText = "display: none;";
         let numOne = first.value;
         let numTwo = second.value;
         firstPlayer.winner(numOne);
@@ -118,12 +119,13 @@ var gameStyle = (function() {
         firstPlayer.power('on');
         computer.power('on');
         AIGame.switch('off');
-
+        
 
     }   
 
     // opens modal for pve difficulty
     function pveModuleOpen() {
+        let selection = document.querySelector('.pveSelect');
         let pve = document.querySelector('.pveModal');
         let pvePlay = document.querySelector('.pvePlay');
 
@@ -131,17 +133,13 @@ var gameStyle = (function() {
         playStyleModal.style.cssText = 'display: none; ';
         pvpModal.style.cssText = 'display: none;';
         pve.style.cssText = 'display: grid;';
-        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: white;'
+        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: transparent;'
         body.style.cssText = 'background-color: white;'
 
         // event listener to start game vs computer
         pvePlay.addEventListener('click', selectOption);
 
-        // determines which parts of code run
-        GBModule.power('off');
-        firstPlayer.power('off');
-        computer.power('off');
-        AIGame.switch('on');
+       
 
     }
         // closes modal && also determines player's choice of computer difficulty
@@ -149,9 +147,26 @@ var gameStyle = (function() {
         let selection = document.querySelector('.pveSelect');
         let pveModal = document.querySelector('.pveModal');
         pveModal.style.cssText = 'display: none'; 
-        bestMove();
-    }
+        
+        // determines which parts of code run
+        if (selection.value == '2') {
+             bestMove();
+             GBModule.power('off');
+             firstPlayer.power('off');
+             computer.power('off');
+            AIGame.switch('on 2');
+            playAgainPrompt.playAgain('on');
+        } else if (selection.value == '1') {
+            GBModule.power('off');
+            firstPlayer.power('off');
+            computer.power('off');
+            AIGame.switch('on 1');
+            AIGame.random();
+            playAgainPrompt.playAgain('on');
 
+        }
+    }
+    
 
                 
 
@@ -165,14 +180,36 @@ var playAgainPrompt = (function() {
         let declaredWinner = document.querySelector('.declaredWinner');
         let play = document.querySelector('.winButtPlay');
         let decline = document.querySelector('.winButtDecline');
-
         play.addEventListener('click', playAgain);
         decline.addEventListener('click', noPlay);
+        let power;
 
-    function playAgain() {
-        for (var i = 0; i < gameBoard.length - 1; i++) {
+
+        function noPlay() {
+            
+            let playStyleModal = document.querySelector('.playStyle');
+            let gameContainer = document.querySelector('.gameContainer');
+            let body = document.querySelector('body');
+            let declaredWinner = document.querySelector('.declaredWinner');
+            let pve = document.querySelector('.pveModal');
+            let pvpModal = document.querySelector('.pvpModal');
+            
+            declaredWinner.style.cssText = 'display: none;';
+            playAgain();
+            
+    
+        }
+
+    function playAgain(status) {
+      
+        if (status == 'on') {
+            aiMode = 'on';
+        }
+
+        for (var i = 0; i < gameBoard.length; i++) {
             if(gameBoard[i].textContent != '') {
                 gameBoard[i].textContent = '';
+                gameBoard[i].style.cssText = '';
                 GBModule.end(false);  
             }
            
@@ -181,17 +218,25 @@ var playAgainPrompt = (function() {
                 GBModule.end(false);  
 
             }
+
+            if (gameBoard.length > 9) {
+                gameBoard.length = 9;
+            }
         }
+
         gameText.length = 0;
         declaredWinner.style.cssText = 'display: none;';
-        
+       
+        if (aiMode === 'on') {
+            AIGame.turns('human');
+            AIGame.random();
+            bestMove();
+        }
     }
 
-    function noPlay() {
-
-    }
     return {
-        playAgain: playAgain
+        playAgain: playAgain,
+        noPlay: noPlay
     }
 })();
 
@@ -209,7 +254,7 @@ singleSpace();
 function scoring(e) {
     let spaces = document.querySelectorAll('td');
     let index = gameBoard.indexOf(e.target);
-    console.log(board);
+    board.splice(index, 1, e.target.textContent)
     scoreTrack(index);
 }      
 
@@ -228,16 +273,19 @@ function scoreTrack(index) {
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
+            
 
         break;
         case gameBoard[3].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[5].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
 
         break;
         // top row
@@ -245,115 +293,130 @@ function scoreTrack(index) {
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[1].textContent === 'O' && gameBoard[2].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         // bottom row
         case gameBoard[6].textContent === 'X' && gameBoard[7].textContent === 'X' && gameBoard[8].textContent == 'X':
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[7].textContent === 'O' && gameBoard[8].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         // left column
         case gameBoard[0].textContent === 'X' && gameBoard[3].textContent === 'X' && gameBoard[6].textContent == 'X':
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[3].textContent === 'O' && gameBoard[6].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         // middle column
         case gameBoard[1].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[7].textContent == 'X':
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         case gameBoard[1].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[7].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         // right column
         case gameBoard[2].textContent === 'X' && gameBoard[5].textContent === 'X' && gameBoard[8].textContent == 'X':
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         
         case gameBoard[2].textContent === 'O' && gameBoard[5].textContent === 'O' && gameBoard[8].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         // top left to bottom right diagonal
         case gameBoard[0].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[8].textContent == 'X':
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         case gameBoard[0].textContent == 'O' && gameBoard[4].textContent == 'O' && gameBoard[8].textContent == 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         // top right to bottom left diagonal
         case gameBoard[6].textContent === 'X' && gameBoard[4].textContent === 'X' && gameBoard[2].textContent === 'X':
             GBModule.winner('X');
             firstPlayer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[2].textContent === 'O':
             GBModule.winner('O');
             computer.declareWinner();
             GBModule.end(true);
-            
+            AIGame.random('game over');
             winner = true;
+            
 
         break;  
         default:
-            if (gameText.length === 9 && win === false) {
+            if (gameText.length === 9 && winner === false) {
                 GBModule.cat();
                 GBModule.end(true);
                 GBModule.winner();
-                
+                AIGame.random('game over');
                 winner = true;
+                
             }    
     } 
 }     
@@ -405,7 +468,6 @@ var GBModule = (function() {
     
     function powerSwitch(status) {
         power = status;
-        console.log(power);
         return power;
     }
     let power;
@@ -537,7 +599,6 @@ const PlayerX = (playername) => {
     // switch that enables factory depending on mode chosen
     const power = (status) => {
         let power = 'off';
-        console.log(power);
         return power;
     }
 
@@ -566,14 +627,18 @@ const PlayerX = (playername) => {
     
     // declares the winner
     const winner = (name) => {
-        if (name == '' && gameStatus == true) {
-            winnerDeclared.textContent = "X's win!";
-            winnerDeclaredModal.style.cssText = 'display: grid;'
-        } else if (name != '' && gameStatus == true) {
-            winnerDeclared.textContent = `${name} has won!`
-            winnerDeclaredModal.style.cssText = 'display: grid;'
-        } else if (name === undefined) {
-            winnerDeclared.textContent = "X's win!";
+       
+        if (power() === 'off') {
+            name = 'X';
+            if (name == '' && gameStatus == true) {
+                winnerDeclared.textContent = "X's win!";
+                winnerDeclaredModal.style.cssText = 'display: grid;'
+            } else if (name != '' && gameStatus == true) {
+                winnerDeclared.textContent = `${name} has won!`
+                winnerDeclaredModal.style.cssText = 'display: grid;'
+            } else if (name === undefined) {
+                winnerDeclared.textContent = "X's win!";
+            }
         }
 
     }
@@ -587,7 +652,6 @@ const PlayerO = (playername) => {
 // switch that shuts on and off depending on game mode chosen
     const power = (status) => {
         let power = 'off';
-        console.log(power);
         return power;
     }
 
@@ -616,8 +680,8 @@ const PlayerO = (playername) => {
             winnerDeclared.textContent = "O's win!";
             winnerDeclaredModal.style.cssText = 'display: grid;'
         } else if (name != '' && gameStatus == true) {
-            winnerDeclared.textContent = `${name} has won!`
-            winnerDeclaredModal.style.cssText = 'display: grid; transition: all 0.4s ease; -webkit-transform: scale(1)'
+            winnerDeclared.textContent = `${name} has won!`;
+            winnerDeclaredModal.style.cssText = 'display: grid; transition: all 0.4s ease; -webkit-transform: scale(1)';
         } else if (name === undefined) {
             winnerDeclared.textContent = "O's win!";
         }
@@ -641,17 +705,18 @@ var AIGame = (function() {
 
         function powerSwitch(status) {
             power = status;
-            console.log(power);
-            return power;
         }
         
         spaces.forEach(space => space.addEventListener('click', playerSelect));
     
         function turnOrder(index) {
+            if (index === 'human') {
+                turn = 'AI';
+                index = 0;
+            }
             
-            if (power === 'on') {
+            if (power === 'on 2') {
                 if (turn === 'AI'){
-                    console.log(index);
                     // changes size of 'X' based on screen size
                     if (w >= 551){
                         gameBoard[index].textContent = 'X';
@@ -660,9 +725,8 @@ var AIGame = (function() {
                         // players turn
 
                         turn = 'human';
-                        console.log(turn + ', AI has gone. It is your turn');
                         board.splice(index, 1, 'X');  
-                        console.log(board);
+                        gameText.push('X');
                         scoreTrack(index);
                     } else if (w <= 550) {
                         gameBoard[index].textContent = 'X';
@@ -670,9 +734,8 @@ var AIGame = (function() {
                         // players turn
 
                         turn = 'human';
-                        console.log(turn + ', AI has gone. It is your turn');
                         board.splice(index, 1, 'X');  
-                        console.log(board);
+                        gameText.push('X');
                         scoreTrack(index);
                     }
                     
@@ -681,7 +744,49 @@ var AIGame = (function() {
                 }
             }
         }
+        
+        function aiRandom(status) {
+
+            if(power === 'on 1' && status != 'game over') {
+                let randomMove = Math.floor(Math.random() * gameBoard.length);
+                aiRandomize(randomMove);
+            }
+        }
            
+
+
+        function aiRandomize(index) {
+            if (turn === 'AI') {
+                if (gameBoard[index].textContent === '') {
+
+                    if (w >= 551){
+                        
+                        gameBoard[index].textContent = 'X';
+                        gameBoard[index].style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
+                        
+                        // players turn
+                        
+                        turn = 'human';
+                        board.splice(index, 1, 'X');  
+                        gameText.push('X');
+                        scoreTrack(index);
+                    } else if (w <= 550) {
+                        gameBoard[index].textContent = 'X';
+                        gameBoard[index].style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 75px;';
+                        // players turn
+                        
+                        turn = 'human';
+                        board.splice(index, 1, 'X');  
+                        gameText.push('X');
+                        scoreTrack(index);
+                    }
+                } else if (gameBoard[index].textContent != '') {
+                    aiRandom();
+                }
+            } else if (turn === 'human') {
+
+            }
+        }
 
         function aiSelect(e) {
                
@@ -689,8 +794,8 @@ var AIGame = (function() {
 
 
         function playerSelect(e) {
-            if (power === 'on') {
-                if (turn === 'human') {
+            
+                if (turn === 'human' && e.target.textContent === '') {
                     let index = gameBoard.indexOf(e.target);
                     board.splice(index, 1, 'O');
                    
@@ -699,31 +804,40 @@ var AIGame = (function() {
                         // changes size of 'O' based on screen size
                         e.target.textContent = 'O';
                         e.target.style.cssText = 'color: white; margin: 0px; padding: 0px; font-size: 100px;';
+                        gameText.push('O');
                         
                     } else if (w <= 550) {
                         e.target.textContent = 'O';
                         e.target.style.cssText = 'color: white; margin: 0px; padding: 0px; font-size: 75px;';
+                        gameText.push('O');
+                        
                     }
                     scoring(e);
                     turn = 'AI'
-                    console.log(turn + ' is up');
-                    console.log(board);
                     scoreTrack(e);
-                    bestMove();
+                    
+                    switch(true) {
+                        case power === 'on 1':
+                            aiRandom();
+                        break;
+                        case power === 'on 2':
+                            bestMove();
+                        break;
+                    }
                 } else {
                     
                 }
-                }
+                
         }
 
         return {
             switch: powerSwitch,
             AI: aiSelect,
             Player: playerSelect,
-            turns: turnOrder
+            turns: turnOrder,
+            random: aiRandom
         }
 })();
-console.log(board);
 
 
 function equals3(a, b, c) {
@@ -769,7 +883,7 @@ function checkWinner() {
      
   
     if (winner == undefined && openSpots == 0) {
-      return 'tie';
+      scoreTrack();
     } else {
       return winner;
     }

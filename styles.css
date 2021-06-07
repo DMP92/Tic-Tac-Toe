@@ -276,6 +276,8 @@ p {
 
 }
 
+
+
 @media screen and (min-width: 551px) {
     .playStyle::before {
         content: '';
