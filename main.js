@@ -77,7 +77,7 @@ var gameStyle = (function() {
         first.value = '';
         second.value = '';
 
-        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: white;'
+        gameContainer.style.cssText = 'transition: all 0.4s ease; -webkit-transform: scale(1); -webkit-filter: blur(0px) grayscale(0px); background-color: transparent;'
         body.style.cssText = 'background-color: white;'
         playStyleModal.style.cssText = 'display: none; '
 
