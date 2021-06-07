@@ -231,6 +231,7 @@ var playAgainPrompt = (function() {
         declaredWinner.style.cssText = 'display: none;';
        
         if (aiMode === 'on') {
+            AIGame.gameStatus('playing');
             AIGame.turns('human');
             AIGame.random();
             bestMove();
@@ -278,6 +279,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
             
 
@@ -288,6 +290,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
 
         break;
@@ -298,6 +301,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[1].textContent === 'O' && gameBoard[2].textContent == 'O':
@@ -306,6 +310,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         // bottom row
@@ -315,6 +320,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[7].textContent === 'O' && gameBoard[8].textContent == 'O':
@@ -323,6 +329,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         // left column
@@ -332,6 +339,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         case gameBoard[0].textContent === 'O' && gameBoard[3].textContent === 'O' && gameBoard[6].textContent == 'O':
@@ -340,6 +348,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         // middle column
@@ -349,6 +358,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         case gameBoard[1].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[7].textContent == 'O':
@@ -357,6 +367,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         // right column
@@ -366,6 +377,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         
@@ -375,6 +387,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         // top left to bottom right diagonal
@@ -384,6 +397,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         case gameBoard[0].textContent == 'O' && gameBoard[4].textContent == 'O' && gameBoard[8].textContent == 'O':
@@ -392,6 +406,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         // top right to bottom left diagonal
@@ -401,6 +416,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
         break;
         case gameBoard[6].textContent === 'O' && gameBoard[4].textContent === 'O' && gameBoard[2].textContent === 'O':
@@ -409,6 +425,7 @@ function scoreTrack(index) {
             GBModule.end(true);
             AIGame.random('game over');
             winner = true;
+            AIGame.gameStatus('game over');
             
 
         break;  
@@ -419,6 +436,7 @@ function scoreTrack(index) {
                 GBModule.winner();
                 AIGame.random('game over');
                 winner = true;
+                AIGame.gameStatus('game over');
                 
             }    
     } 
@@ -714,13 +732,19 @@ var AIGame = (function() {
     let turn = 'AI';
 // player marker for X
         let power = 'off';
+        let gameStatus = 'playing';
+        
+        function currentGameStatus(status) {
+            console.log(gameStatus);
+            gameStatus = status;
 
+        }
         function powerSwitch(status) {
             power = status;
         }
         
         spaces.forEach(space => space.addEventListener('click', playerSelect));
-    
+        
         function turnOrder(index) {
             if (index === 'human') {
                 turn = 'AI';
@@ -735,7 +759,7 @@ var AIGame = (function() {
                         gameBoard[index].style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 100px;';
                         
                         // players turn
-
+                        
                         turn = 'human';
                         board.splice(index, 1, 'X');  
                         gameText.push('X');
@@ -744,7 +768,7 @@ var AIGame = (function() {
                         gameBoard[index].textContent = 'X';
                         gameBoard[index].style.cssText = 'color: rgb(51, 172, 202); margin: 0px; padding: 0px; font-size: 75px;';
                         // players turn
-
+                        
                         turn = 'human';
                         board.splice(index, 1, 'X');  
                         gameText.push('X');
@@ -752,25 +776,26 @@ var AIGame = (function() {
                     }
                     
                 } else if (turn == 'human') {
-                   
+                    
                 }
             }
         }
         
-        function aiRandom(status) {
-
-            if(power === 'on 1' && status != 'game over') {
+        function aiRandom() {
+            console.log(gameStatus);
+            
+            if(power === 'on 1' && gameStatus != 'game over') {
                 let randomMove = Math.floor(Math.random() * gameBoard.length);
                 aiRandomize(randomMove);
             }
         }
-           
-
-
+        
+        
+        
         function aiRandomize(index) {
             if (turn === 'AI') {
                 if (gameBoard[index].textContent === '') {
-
+                    
                     if (w >= 551){
                         
                         gameBoard[index].textContent = 'X';
@@ -847,7 +872,8 @@ var AIGame = (function() {
             AI: aiSelect,
             Player: playerSelect,
             turns: turnOrder,
-            random: aiRandom
+            random: aiRandom,
+            gameStatus: currentGameStatus
         }
 })();
 
