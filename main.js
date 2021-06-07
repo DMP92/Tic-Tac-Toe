@@ -119,7 +119,7 @@ var gameStyle = (function() {
         firstPlayer.power('on');
         computer.power('on');
         AIGame.switch('off');
-        
+        winnerDeclared.style.cssText = "display: none;";
 
     }   
 
@@ -196,10 +196,34 @@ var playAgainPrompt = (function() {
             let pve = document.querySelector('.pveModal');
             let pvpModal = document.querySelector('.pvpModal');
             
-            declaredWinner.style.cssText = 'display: none;';
-            playAgain();
             
-    
+            for (var i = 0; i < gameBoard.length; i++) {
+                if(gameBoard[i].textContent != '') {
+                    gameBoard[i].textContent = '';
+                    gameBoard[i].style.cssText = '';
+                    GBModule.end(false);  
+
+                }
+                
+                if (board[i] != '') {
+                    board[i] = '';
+                    GBModule.end(false);  
+
+                }
+                
+                if (gameBoard.length > 9) {
+                    gameBoard.length = 9;
+                }
+            }
+            
+            gameText.length = 0;
+            
+            body.style.cssText = 'background-color: black;';
+            gameContainer.style.cssText = 'display: none; transition: all 0.01ms ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);';
+            playStyleModal.style.cssText = 'border-radius: 2px';
+            pvpModal.style.cssText ="transition: all 0.4s ease; -webkit-transform: scale(.5); -webkit-filter: blur(5px) grayscale(100%);";
+            pve.style.cssText = 'display: none;';
+            declaredWinner.style.cssText = 'display: none;';
         }
 
     function playAgain(status) {
