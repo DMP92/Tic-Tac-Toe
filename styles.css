@@ -509,6 +509,11 @@ i {
     }
 }
 
+::placeholder {
+    color: white;
+    opacity: .7;
+}
+
 @media screen and (min-width: 551px) {
     .firsth2 {
         grid-area: "first";
