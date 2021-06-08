@@ -13,6 +13,7 @@
     the looping function directly with an event listener
     
 */
+let aiMode;
 var myMove = false;
 // global copies of both needed arrays
 let gameBoard = [];
