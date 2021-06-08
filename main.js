@@ -489,11 +489,6 @@ function gameCountO(index) {
     }
 }
 
-function catGame(e) {
-    // thought about ref this function up in the loop for nodelist iterations, causing the 'this.index' 
-    // to push the number of the index to an array stored in here, and once all 8 array spots were filled, 
-    // calling it a cat's game - situationally based on whether or not anyone won or not obviously
-}
 
     return {
         gameX: gameCount,
@@ -690,7 +685,7 @@ const PlayerX = (playername) => {
 }
     
 
-// Marker for 'O'!
+// Marker for 'O' ------------------------
 const PlayerO = (playername) => {
     let powerSwitch = 'on'
 // switch that shuts on and off depending on game mode chosen
@@ -752,7 +747,8 @@ var AIGame = (function() {
     let spaces = document.querySelectorAll('td');
     let w = window.innerWidth;
     let turn = 'AI';
-// player marker for X
+
+
         let power = 'off';
         let gameStatus = 'playing';
         
@@ -897,7 +893,7 @@ var AIGame = (function() {
         }
 })();
 
-
+// equals3 simplifies winning conditions for checkWinner
 function equals3(a, b, c) {
     return a == b && b == c && a != '';
   }
@@ -947,63 +943,8 @@ function checkWinner() {
     }
   }
 } }
-/* *********************** ended on friday the 28th of may 
-
-I will need to make two separate functions. One inside playerx the other in playerO
-they will have to get data from the PvE play button saying to clear the name input text field
-there will need to be two conditionals
-one that says you won / lost 
-the other saying the computer won
-
-Also I need to refactor and use '_'privateFunctionName on all of the private functions
-
-I need to create a module for the AI 
-
-also I could probably get more separation out of some 
-of the revealing module patterns I've created
-
-*****************
-also I have an idea for the algorithm
-
-hard
-just like the etch a sketch project, with the minmax algo
-all I need to do, is gather the winning conditions, and get the computer
-to randomly select one of the winning conditions (if it's possible). Once it becomes 
-impossible, it should switch to another one that's possible. It'll just keep switching until
-it wins
-
-medium
-same thing as above, but I should mix in some level of randomness. 
-throw out a certain percentage of winning and random conditions '
-so sometimes it picks a winning condition and other times it picks randomness that makes
-no sense
-
-easy 
-basically I'll sprinkle in some winning conditions, but it'll pretty 
-much just randomly throw out peices without much rhyme or reason.
-
-I will give it a handful of winning conditions, BUT mainly it'll truly be easy mode
 
 
-
-*/
-
-
-        
-// // So basically - when pushing changes to repo through terminal
-// // the order is: 
-// // 1.   'git status'
-// // to check to see that they're there with
-
-// // 2.   'git add .'
-// // to add the changes 
-
-// // 3.   'git commit -m "comment here"'
-// // to label your changes for organization
-
-// // 4.   'git push'
-// // to push the changes to your repo
-        
         
         
         
